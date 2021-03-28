@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dragpools.client</groupId>
     <artifactId>DP_CLIENT</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -75,7 +75,7 @@
         <connection>scm:git:git://github.com/fermatjen/dragpoolsclient.git</connection>
         <developerConnection>scm:git:git@github.com/fermatjen/dragpoolsclient.git</developerConnection>
         <url>https://github.com/fermatjen/dragpoolsclient</url>
-        <tag>HEAD</tag>
+        <tag>DP_CLIENT-1.0.1</tag>
     </scm>
     
     <distributionManagement>
