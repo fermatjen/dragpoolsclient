@@ -482,6 +482,7 @@ public class JSONObject {
     /**
     * Get the enum value associated with a key.
     * 
+     * @param <E>
     * @param clazz
     *           The type of enum to retrieve.
     * @param key
@@ -671,6 +672,7 @@ public class JSONObject {
     /**
      * Get an array of field names from a JSONObject.
      *
+     * @param jo
      * @return An array of field names, or null if there are no names.
      */
     public static String[] getNames(JSONObject jo) {
@@ -691,6 +693,7 @@ public class JSONObject {
     /**
      * Get an array of field names from an Object.
      *
+     * @param object
      * @return An array of field names, or null if there are no names.
      */
     public static String[] getNames(Object object) {
@@ -872,6 +875,7 @@ public class JSONObject {
     /**
      * Get the enum value associated with a key.
      * 
+     * @param <E>
      * @param clazz
      *            The type of enum to retrieve.
      * @param key
@@ -885,6 +889,7 @@ public class JSONObject {
     /**
      * Get the enum value associated with a key.
      * 
+     * @param <E>
      * @param clazz
      *            The type of enum to retrieve.
      * @param key
@@ -1344,9 +1349,7 @@ public class JSONObject {
 
     /**
      * Produce a string in double quotes with backslash sequences in all the
-     * right places. A backslash will be inserted within </, producing <\/,
-     * allowing JSON text to be delivered in HTML. In JSON text, a string cannot
-     * contain a control character or an unescaped quote or backslash.
+     * right places. 
      *
      * @param string
      *            A String
@@ -1364,6 +1367,13 @@ public class JSONObject {
         }
     }
 
+    /**
+     *
+     * @param string
+     * @param w
+     * @return
+     * @throws IOException
+     */
     public static Writer quote(String string, Writer w) throws IOException {
         if (string == null || string.length() == 0) {
             w.write("\"\"");
@@ -1734,11 +1744,11 @@ public class JSONObject {
     }
 
     /**
-     * Write the contents of the JSONObject as JSON text to a writer. For
-     * compactness, no whitespace is added.
-     * <p>
+     * Write the contents of the JSONObject as JSON text to a writer.For
+ compactness, no whitespace is added.<p>
      * Warning: This method assumes that the data structure is acyclical.
      *
+     * @param writer
      * @return The writer.
      * @throws JSONException
      */
