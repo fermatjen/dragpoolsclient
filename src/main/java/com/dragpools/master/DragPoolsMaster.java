@@ -24,21 +24,38 @@ public class DragPoolsMaster {
     private String masterHost = null;
     private int masterPort = 12000;
 
+    /**
+     *
+     */
     public static class Builder {
 
         private String masterHost = null;
         private int masterPort = 12000;
 
+        /**
+         *
+         * @param masterHost
+         * @return
+         */
         public Builder withHost(String masterHost) {
             this.masterHost = masterHost;
             return this;
         }
 
+        /**
+         *
+         * @param masterPort
+         * @return
+         */
         public Builder withPort(int masterPort) {
             this.masterPort = masterPort;
             return this;
         }
 
+        /**
+         *
+         * @return
+         */
         public DragPoolsMaster build() {
 
             DragPoolsMaster dpMaster = new DragPoolsMaster();
@@ -54,6 +71,12 @@ public class DragPoolsMaster {
         // Nothing here
     }
 
+    /**
+     *
+     * @param result
+     * @param errorMessage
+     * @return
+     */
     public DragResult interruptResult(DragResult result, String errorMessage) {
 
         result.setErrorMessage(errorMessage);
@@ -62,6 +85,13 @@ public class DragPoolsMaster {
         return result;
     }
 
+    /**
+     *
+     * @param result
+     * @param jsonResponse
+     * @param queryTime
+     * @return
+     */
     public DragResult propagateResult(DragResult result, String jsonResponse, long queryTime) {
 
         if (jsonResponse.startsWith("{") && jsonResponse.endsWith("}")) {
@@ -93,6 +123,11 @@ public class DragPoolsMaster {
         return result;
     }
 
+    /**
+     *
+     * @param query
+     * @return
+     */
     public DragResult executeQuery(DragQuery query) {
 
         DragResult result = new DragResult();

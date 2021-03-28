@@ -14,6 +14,9 @@ public class DragQuery {
     private String postBody = null;
     private String queryString = null;
 
+    /**
+     *
+     */
     public static class Builder {
 
         private DragQueryType queryType = null;
@@ -21,25 +24,50 @@ public class DragQuery {
         private String postBody = null;
         private String queryString = null;
 
+        /**
+         *
+         * @param queryType
+         * @return
+         */
         public Builder withQueryType(DragQueryType queryType) {
             this.queryType = queryType;
             return this;
         }
 
+        /**
+         *
+         * @param headers
+         * @return
+         */
         public Builder withDragHeaders(Map<String, String> headers) {
             this.headers = headers;
             return this;
         }
 
+        /**
+         *
+         * @param postBody
+         * @return
+         */
         public Builder withDragBody(String postBody) {
             this.postBody = postBody;
             return this;
         }
+
+        /**
+         *
+         * @param queryString
+         * @return
+         */
         public Builder withQuery(String queryString) {
             this.queryString = queryString;
             return this;
         }
 
+        /**
+         *
+         * @return
+         */
         public DragQuery build() {
 
             DragQuery dQuery = new DragQuery();
@@ -57,18 +85,34 @@ public class DragQuery {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public DragQueryType getQueryType() {
         return queryType;
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<String, String> getHeaders() {
         return headers;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPostBody() {
         return postBody;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getQueryString() {
         return queryString;
     }

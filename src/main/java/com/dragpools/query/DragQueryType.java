@@ -6,5 +6,9 @@ package com.dragpools.query;
  * https://www.dragpools.io
  */
 public enum DragQueryType{
+
+    /**
+     *
+     */
     GET, POST
 }
