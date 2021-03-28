@@ -10,6 +10,34 @@
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
     </properties>
+
+    <name>Drag Pools Client</name>
+	<description>A simple Drag Pools Client to connect and execute Drag Queries in a Drag Pools cluster.</description>
+	<url>https://github.com/fermatjen/dragpoolsclient</url>
+
+	<organization>
+		<url>https://github.com/fermatjen/dragpoolsclient</url>
+		<name>Drag Pools</name>
+	</organization>
+	<inceptionYear>2019</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>GPL-3.0 License</name>
+			<url>https://github.com/fermatjen/dragpoolsclient/blob/main/LICENSE</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Frank Jennings</name>
+			<email>fermatjen@yahoo.com</email>
+			<organization>Drag Pools</organization>
+			<organizationUrl>https://github.com/fermatjen/dragpoolsclient</organizationUrl>
+			<timezone>UTC+05:30</timezone>
+		</developer>
+	</developers>
+
     
     <build>
         <plugins>
