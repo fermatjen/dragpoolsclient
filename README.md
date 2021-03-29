@@ -3,7 +3,7 @@ A simple Java-based client for Drag Pools to send Drag Queries with payload to a
 
 Add the required Drag Pool client dependency in you pom.xml file:
 
-```
+```xml
         <dependency>
             <groupId>com.dragpools.client</groupId>
             <artifactId>DP_CLIENT</artifactId>
