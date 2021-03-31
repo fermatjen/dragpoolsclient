@@ -7,7 +7,7 @@ Add the required Drag Pool client dependency in you pom.xml file:
         <dependency>
             <groupId>com.dragpools.client</groupId>
             <artifactId>DP_CLIENT</artifactId>
-            <version>1.0.8</version>
+            <version>1.0.9</version>
         </dependency>
 ```
 
@@ -60,5 +60,42 @@ Similiarly, send a post request:
                 .build();
 
 ```
+
+Let's say you want to store a KV pair and the value a simple JSON object representing an employee record. First, define the JSON object:
+
+```java
+        JSONObject emp = new JSONObject();
+        emp.put("name", "jen");
+        emp.put("age", 35);
+        emp.put("city", "Chennai");
+```
+Now that you have a simple employee record, create a Drag Document:
+
+```java
+        DragDocument doc = new DragDocument();
+        // Set the key and value
+        doc.setKey("EMP_1");
+        doc.setJsonValue(emp);
+```
+You have a Drag Document ready to be sent to the Master!
+
+```java
+        // Get the drag body from document
+        String dragBody = doc.getDragBody();
         
+        // Construct the Drag Query
+        DragQuery dragPostQuery = new DragQuery.Builder()
+                .withQueryType(DragQueryType.POST)
+                .withQuery("/document")
+                .withDragBody(dragBody)
+                .withDragHeaders(dragHeaders)
+                .build();
+```
+
+Now, hit the Master!
+
+```java
+        //Execute drag query
+        DragResult result = dragMaster.executeQuery(dragPostQuery);
+```
         
