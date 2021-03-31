@@ -136,7 +136,12 @@ public class DragPoolsMaster {
         URL url = null;
 
         try {
-            url = new URL(masterHost + ":" + masterPort + "/" + query.getQueryString());
+            String queryString = query.getQueryString();
+            
+            if(queryString.startsWith("/")){
+                queryString = queryString.substring(1, queryString.length());
+            }
+            url = new URL(masterHost + ":" + masterPort + "/" + queryString);
         } catch (MalformedURLException ex) {
             return interruptResult(result, ex.getMessage());
         }
@@ -144,9 +149,11 @@ public class DragPoolsMaster {
         StringBuilder content = new StringBuilder();
 
         HttpURLConnection connection = null;
-
+        
         long start = 0L;
         long end = 0L;
+        
+        start = System.currentTimeMillis();
 
         try {
             connection = (HttpURLConnection) url.openConnection();
@@ -198,7 +205,7 @@ public class DragPoolsMaster {
         //Process response
         try {
 
-            start = System.currentTimeMillis();
+           
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
                 String inputLine;
 
@@ -206,8 +213,6 @@ public class DragPoolsMaster {
                     content.append(inputLine);
                 }
             }
-
-            end = System.currentTimeMillis();
 
         } catch (MalformedURLException ex) {
             return interruptResult(result, ex.getMessage());
@@ -217,6 +222,8 @@ public class DragPoolsMaster {
         }
 
         String r = content.toString().trim();
+        
+        end = System.currentTimeMillis();
         
         return propagateResult(result, r, (end - start));
         
