@@ -1,6 +1,16 @@
 # Simple Drag Pools Java Client
 A simple Java-based client for Drag Pools to send Drag Queries with payload to a running Drag Pools cluster (https://dragpools.io).
 
+Add the required Drag Pool client dependency in you pom.xml file:
+
+```xml
+        <dependency>
+            <groupId>com.dragpools.client</groupId>
+            <artifactId>DP_CLIENT</artifactId>
+            <version>1.0.8</version>
+        </dependency>
+```
+
 First, instantiate a Master:
 
 ```java
