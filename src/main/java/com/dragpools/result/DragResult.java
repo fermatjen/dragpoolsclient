@@ -4,11 +4,10 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Frank Jennings
- * https://www.dragpools.io
+ * @author Frank Jennings https://www.dragpools.io
  */
 public class DragResult {
-    
+
     private JSONObject dragResult = null;
     private boolean isSuccess = false;
     private String errorMessage = null;
@@ -48,8 +47,5 @@ public class DragResult {
     public void setQueryTime(long queryTime) {
         this.queryTime = queryTime;
     }
-    
-    
-    
-    
+
 }

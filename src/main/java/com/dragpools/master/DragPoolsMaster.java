@@ -1,8 +1,10 @@
 package com.dragpools.master;
 
+import com.dragpools.function.DragFunction;
 import com.dragpools.query.DragQuery;
 import com.dragpools.query.DragQueryType;
 import com.dragpools.result.DragResult;
+import com.dragpools.runner.DragRunner;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +25,9 @@ public class DragPoolsMaster {
 
     private String masterHost = null;
     private int masterPort = 12000;
+    private final String JSON_CONTENT_MIME = "application/json";
+    private final String TEXT_CONTENT_MIME = "text/plain";
+    private final String JAVASCRIPT_CONTENT_MIME = "application/javascript";
 
     /**
      *
@@ -95,19 +100,19 @@ public class DragPoolsMaster {
     public DragResult propagateResult(DragResult result, String jsonResponse, long queryTime) {
 
         if (jsonResponse.startsWith("{") && jsonResponse.endsWith("}")) {
-            
+
             JSONObject dragResponseObject = new JSONObject(jsonResponse);
-            
+
             result.setDragResult(dragResponseObject);
             result.setQueryTime(queryTime);
             result.setIsSuccess(true);
 
         } else if (jsonResponse.startsWith("[") && jsonResponse.endsWith("]")) {
-            
+
             JSONArray jsonResponseWrapper = new JSONArray(jsonResponse);
             JSONObject dragResponseObject = new JSONObject(jsonResponse);
             dragResponseObject.put("Result", jsonResponseWrapper);
-            
+
             result.setDragResult(dragResponseObject);
             result.setQueryTime(queryTime);
             result.setIsSuccess(true);
@@ -137,8 +142,8 @@ public class DragPoolsMaster {
 
         try {
             String queryString = query.getQueryString();
-            
-            if(queryString.startsWith("/")){
+
+            if (queryString.startsWith("/")) {
                 queryString = queryString.substring(1, queryString.length());
             }
             url = new URL(masterHost + ":" + masterPort + "/" + queryString);
@@ -149,10 +154,10 @@ public class DragPoolsMaster {
         StringBuilder content = new StringBuilder();
 
         HttpURLConnection connection = null;
-        
+
         long start = 0L;
         long end = 0L;
-        
+
         start = System.currentTimeMillis();
 
         try {
@@ -162,7 +167,7 @@ public class DragPoolsMaster {
         }
 
         //Master only sends JSON
-        connection.setRequestProperty("accept", "application/json");
+        connection.setRequestProperty("accept", JSON_CONTENT_MIME);
         //Add other headers
         Map<String, String> headersMap = query.getHeaders();
 
@@ -182,12 +187,44 @@ public class DragPoolsMaster {
             case POST -> {
                 try {
                     connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Content-Type", "application/json");
+
                     connection.setDoOutput(true);
+
+                    String postContentType = JSON_CONTENT_MIME;
+
+                    String postBody = query.getPostBody();
+
+                    //Check if this a Function query
+                    DragFunction dragFunction = query.getDragFunction();
+
+                    if (dragFunction != null) {
+                        String dragFunctionBody = dragFunction.getFunctionBody();
+
+                        if (dragFunctionBody != null) {
+                            //Override
+                            postBody = dragFunctionBody;
+                            postContentType = JAVASCRIPT_CONTENT_MIME;
+                        }
+                    }
+
+                    //Check if this is a Runner query. Runner overrides Function
+                    DragRunner dragRunner = query.getDragRunner();
+
+                    if (dragRunner != null) {
+                        String dragRunnerBody = dragRunner.getRunnerBody();
+
+                        if (dragRunnerBody != null) {
+                            //Override
+                            postBody = dragRunnerBody;
+                            postContentType = TEXT_CONTENT_MIME;
+                        }
+                    }
+
+                    connection.setRequestProperty("Content-Type", postContentType);
 
                     //Write body
                     try (OutputStream os = connection.getOutputStream()) {
-                        byte[] input = query.getPostBody().getBytes("utf-8");
+                        byte[] input = postBody.getBytes("utf-8");
                         os.write(input, 0, input.length);
                     } catch (IOException ex) {
                         return interruptResult(result, ex.getMessage());
@@ -205,7 +242,6 @@ public class DragPoolsMaster {
         //Process response
         try {
 
-           
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
                 String inputLine;
 
@@ -222,10 +258,10 @@ public class DragPoolsMaster {
         }
 
         String r = content.toString().trim();
-        
+
         end = System.currentTimeMillis();
-        
+
         return propagateResult(result, r, (end - start));
-        
+
     }
 }
