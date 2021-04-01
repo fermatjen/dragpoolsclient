@@ -98,4 +98,104 @@ Now, hit the Master!
         //Execute drag query
         DragResult result = dragMaster.executeQuery(dragPostQuery);
 ```
+
+Let's create a Runner. Runners are simple Java code that can be broadcasted to all the available (healthy) Workers. Workers execute the Java code and send back the result.
+
+Let's say we have a file `MyRunner.drn` containing the Runner code:
+
+```java
+package com.dragpools.runners;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.LinkedHashMap;
+
+public class DragRunner {
+    
+    public Map init(){
+        LinkedHashMap<String, String> initMap = new LinkedHashMap<>();
         
+        initMap.put("mode", "live");
+        initMap.put("name", "My Simple Runner");
+        
+        return initMap;
+    }
+
+    public Map run(ConcurrentNavigableMap<String, String> dragPoolData) {
+        // We will wrap our compute results in a Map
+        LinkedHashMap<String, Integer> myMap = new LinkedHashMap<>();
+        
+        myMap.put("Drag Pool Size", dragPoolData.size());
+        
+        return myMap;
+    }
+}
+```
+
+This is a very simple Runner to get the size of the KV store.
+
+```java
+        Path fileName = Path.of("MyRunner.drn");
+        
+        try {
+            String runnerBody = Files.readString(fileName);
+
+            //Define a DragRunner
+            DragRunner runner = new DragRunner(runnerBody);
+
+            DragQuery dragRunnerQuery = new DragQuery.Builder()
+                    .withQueryType(DragQueryType.POST)
+                    .withQuery("/runner")
+                    .withDragRunner(runner)
+                    .withDragHeaders(dragHeaders)
+                    .build();
+
+            //Execute drag query
+            DragResult result = dragMaster.executeQuery(dragRunnerQuery);
+
+            if (result.isSuccess()) {
+                String response = result.getDragResult().toString();
+                System.out.println(response);
+                System.out.println("Time in ms: " + result.getQueryTime());
+            } else {
+                System.out.println(result.getErrorMessage());
+            }
+
+        } catch (IOException ex) {
+            // <YOUR CODE>
+        }
+```
+
+Similarly, instead of Runner the payload type could be a simple function that can be executed in the Master. Drag Functions are pure `JavaScript/TypeScript` that can be executed in the Master.
+
+Let's say we have a JavaScript file `myjs.js`:
+
+```javascript
+var build = function() {
+    var map = {};
+    map.name = "MySimpleFunction";
+    return map;
+};
+
+var run = function(map) {
+    return "Hello from Master!";
+};
+```
+
+Now, you can send this function as a payload:
+
+```java
+        Path fileName = Path.of("myjs.js");
+        String functionBody = Files.readString(fileName);
+
+        //Define a Drag Function
+        DragFunction function = new DragFunction(functionBody);
+
+        DragQuery dragFunctionQuery = new DragQuery.Builder()
+                .withQueryType(DragQueryType.POST)
+                .withQuery("/function")
+                .withDragFunction(function)
+                .withDragHeaders(dragHeaders)
+                .build();
+```
+
