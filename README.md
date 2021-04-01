@@ -7,7 +7,7 @@ Add the required Drag Pool client dependency in you pom.xml file:
         <dependency>
             <groupId>com.dragpools.client</groupId>
             <artifactId>DP_CLIENT</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.10</version>
         </dependency>
 ```
 
