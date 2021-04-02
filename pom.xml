@@ -48,6 +48,7 @@
                 <configuration>
                     <source>14</source>
                     <target>14</target>
+		    <release>14</release>
                 </configuration>
             </plugin>
             <plugin>
