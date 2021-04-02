@@ -11,6 +11,12 @@ Add the required Drag Pool client dependency in you pom.xml file:
         </dependency>
 ```
 
+If your are on Gradle:
+
+```
+implementation 'com.dragpools.client:DP_CLIENT:1.0.10'
+```
+
 First, instantiate a Master:
 
 ```java
