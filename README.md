@@ -29,7 +29,7 @@ Then, create a Drag Query:
 
 ```java
        //Initialize header
-       Map dragHeaders = new LinkedHashMap();
+       Map<String, String> dragHeaders = new LinkedHashMap<>();
        dragHeaders.put("Authorization", "Bearer <DRAG_BEARER_TOKEN>");
 
        //Simple Get Query
@@ -114,7 +114,6 @@ package com.dragpools.runners;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.LinkedHashMap;
 
 public class DragRunner {
     
