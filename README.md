@@ -205,3 +205,54 @@ Now, you can send this function as a payload:
                 .build();
 ```
 
+Let's send a piped-query to the Master that might trigger a long-running job. Drag Pool Jobs come handy when you can fetch the query results at your convenience. Note that depending on the Drag Pools cluster (number of Workers, hardware setup, healing Workers, busy Masters) jobs can finish immediately or take a few seconds to complete.
+
+The following POST body defines our piped query:
+
+```json
+{
+	"requests": ["/documents/name/contain:James","/documents/*/Rebecca"],
+	"filters":"description/contain:huge"
+}
+```
+
+Note that we initiate multiple searches across Workers and later assemble the results in the Master and do a final filtering. There are two Drag queries and they go to two available Workers. When both the Workers return the results, Master further filters using the condition mentioned.
+
+Now, send the POST request:
+
+```java
+        // Construct the Drag Query
+        DragQuery dragPostQuery = new DragQuery.Builder()
+                .withQueryType(DragQueryType.POST)
+                .withQuery("/job")
+                // dragBody is your JSON JOB string
+                .withDragBody(dragBody)
+                .withDragHeaders(dragHeaders)
+                .build();
+```
+
+Master returns a JOB ID that can be used to fetch the results:
+
+```json
+{
+    "requests": [
+        "/documents/name/contain:James",
+        "/documents/*/Rebecca"
+    ],
+    "filters": "description/contain:huge",
+    "id": "e529a7fe-beea-4940-b87b-5ef68d9dc28f",
+    "status": "In progress",
+    "result": []
+}
+```
+
+To fetch the result of your Job based on the ID, create a simple Drag Query:
+
+```java
+       //Simple Get Query
+       DragQuery dragGetQuery = new DragQuery.Builder()
+                                  .withQueryType(DragQueryType.GET)
+                                  .withQuery("job/e529a7fe-beea-4940-b87b-5ef68d9dc28f")
+                                  .withDragHeaders(dragHeaders)
+                                  .build();
+```
