@@ -10,6 +10,8 @@ on:
     - cron: '21 9 * * 0'
 
 jobs:
+  env:
+    ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
@@ -29,9 +31,11 @@ jobs:
         languages: ${{ matrix.language }}
     
     - name: Setup Java JDK
+      
       uses: actions/setup-java@v1.3.0
       with:
         java-version: 14
+      
 
     - run: |
         mvn compile
